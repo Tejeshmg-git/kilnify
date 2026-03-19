@@ -134,8 +134,7 @@ body {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(231, 229, 228, 0.3);
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 50;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }

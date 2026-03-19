@@ -1,37 +1,37 @@
-    // --- Theme & RTL Logic ---
-    const html = document.documentElement;
-    
-    window.toggleTheme = () => {
-        html.classList.toggle('dark');
-        const isDark = html.classList.contains('dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        updateThemeIcons(isDark);
-    };
+// --- Theme & RTL Logic ---
+const html = document.documentElement;
 
-    window.toggleRTL = () => {
-        const isRTL = html.dir === 'rtl';
-        const newDir = isRTL ? 'ltr' : 'rtl';
-        html.dir = newDir;
-        localStorage.setItem('dir', newDir);
-        window.dispatchEvent(new Event('resize'));
-    };
+window.toggleTheme = () => {
+    html.classList.toggle('dark');
+    const isDark = html.classList.contains('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    if (typeof updateThemeIcons === 'function') updateThemeIcons(isDark);
+};
 
-    const updateThemeIcons = (isDark) => {
-        document.querySelectorAll('#theme-toggle [data-lucide]').forEach(icon => {
-            const newIcon = isDark ? 'sun' : 'moon';
-            icon.setAttribute('data-lucide', newIcon);
-        });
-        if (window.lucide) lucide.createIcons();
-    };
+window.toggleRTL = () => {
+    const isRTL = html.dir === 'rtl';
+    const newDir = isRTL ? 'ltr' : 'rtl';
+    html.dir = newDir;
+    localStorage.setItem('dir', newDir);
+    window.dispatchEvent(new Event('resize'));
+};
 
-    // Initialize states instantly (Theme check is also in Head)
-    if (localStorage.getItem('theme') === 'dark') {
-        html.classList.add('dark');
-        updateThemeIcons(true);
-    }
-    if (localStorage.getItem('dir') === 'rtl') {
-        html.dir = 'rtl';
-    }
+const updateThemeIcons = (isDark) => {
+    document.querySelectorAll('#theme-toggle [data-lucide]').forEach(icon => {
+        const newIcon = isDark ? 'sun' : 'moon';
+        icon.setAttribute('data-lucide', newIcon);
+    });
+    if (window.lucide) lucide.createIcons();
+};
+
+// Initialize states instantly (Theme check is also in Head)
+if (localStorage.getItem('theme') === 'dark') {
+    html.classList.add('dark');
+    updateThemeIcons(true);
+}
+if (localStorage.getItem('dir') === 'rtl') {
+    html.dir = 'rtl';
+}
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, { threshold: 0.5 });
 
-    document.querySelectorAll('.stat-counter, .font-artistic.text-[#B35C44]').forEach(stat => {
+    document.querySelectorAll('.stat-counter').forEach(stat => {
         if (!isNaN(parseFloat(stat.innerText))) {
             stat.dataset.original = stat.innerText;
             statsObserver.observe(stat);
