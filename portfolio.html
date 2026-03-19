@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth overflow-x-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Kilnify Studio</title>
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        clay: {
+                            50: '#FAF8F6',
+                            100: '#F2EBE5',
+                            500: '#B35C44',
+                            600: '#9E4A35',
+                            900: '#2D1E16',
+                            950: '#14100E',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        artistic: ['Syne', 'sans-serif'],
+                    },
+                    screens: {
+                        'xs': '380px',
+                        'sm': '640px',
+                        'md': '768px',
+                        'lg': '1024px',
+                        'xl': '1280px',
+                        '2xl': '1536px',
+                    },
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // Apply saved settings instantly to prevent flicker
+        if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+        if (localStorage.getItem('dir') === 'rtl') document.documentElement.dir = 'rtl';
+    </script>
+    <style>
+        :root {
+            --clay-primary: #B35C44;
+            --clay-secondary: #2D1E16;
+            --clay-surface: #FAF8F6;
+        }
+
+        .text-gradient-clay {
+            background: linear-gradient(135deg, #B35C44 0%, #E68A6E 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .dark .glass-nav {
+            background: rgba(20, 16, 14, 0.7);
+            border-bottom-color: rgba(255,255,255,0.05);
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .filter-pill {
+            padding: 0.6rem 1.5rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(179, 92, 68, 0.1);
+            background: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .dark .filter-pill {
+            background: #1c1917;
+            border-color: rgba(179, 92, 68, 0.1);
+        }
+        .filter-pill:hover {
+            border-color: var(--clay-primary);
+            color: var(--clay-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(179, 92, 68, 0.3);
+        }
+        .filter-pill.active {
+            background-color: var(--clay-primary);
+            border-color: var(--clay-primary);
+            color: white !important;
+            box-shadow: 0 15px 30px -10px rgba(179, 92, 68, 0.4);
+        }
+
+        .portfolio-card {
+            background: white;
+            border-radius: 2.5rem;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .dark .portfolio-card {
+            background: #14110F;
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+        .portfolio-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.15);
+            border-color: rgba(179, 92, 68, 0.2);
+        }
+
+        .portfolio-image-container {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+        }
+        .portfolio-image-container img {
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .portfolio-card:hover .portfolio-image-container img {
+            transform: scale(1.1);
+        }
+
+        .hover-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(15, 13, 12, 0.95), transparent);
+            opacity: 0;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2.5rem;
+            z-index: 10;
+        }
+        .portfolio-card:hover .hover-overlay {
+            opacity: 1;
+        }
+
+        .btn-clay {
+            background-color: var(--clay-primary);
+            color: white;
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+        }
+        .btn-clay:hover {
+            background-color: #2D1E16;
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -10px rgba(179, 92, 68, 0.3);
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-white dark:bg-stone-950 text-stone-900 dark:text-stone-100 transition-colors duration-300 overflow-x-hidden">
+
+    <!-- Master Header from SS -->
+    <nav class="glass-nav px-4 md:px-8 py-4 flex items-center justify-between sticky top-0 z-[1000] border-b border-stone-100 dark:border-white/5">
+        <a href="index.html" class="flex items-center gap-2 md:gap-3 group shrink-0">
+            <div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-xl flex items-center justify-center shadow-lg shadow-black/5 overflow-hidden p-1 transition-transform group-hover:scale-110">
+                <img src="assets/logo.png" alt="Kilnify Logo" class="w-full h-full object-contain scale-125">
+            </div>
+            <span class="text-sm sm:text-lg md:text-2xl font-artistic tracking-widest text-clay-500 font-bold uppercase transition-all">KILNIFY</span>
+        </a>
+        
+        <div class="hidden xl:flex items-center gap-8 font-bold text-[13px] uppercase tracking-widest">
+            <div class="relative group">
+                <a href="home-v2.html" class="flex items-center gap-1 hover:text-clay-500 transition-colors py-2">
+                    Home <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-hover:rotate-180"></i>
+                </a>
+                <div class="absolute top-full -left-4 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                    <div class="bg-white dark:bg-stone-900 rounded-2xl shadow-2xl border border-stone-100 dark:border-stone-800 p-2 min-w-[180px]">
+                        <a href="index.html" class="block px-4 py-3 hover:bg-stone-50 dark:hover:bg-stone-800 rounded-xl text-[10px] tracking-widest font-black uppercase">Home V1</a>
+                        <a href="home-v2.html" class="block px-4 py-3 hover:bg-stone-50 dark:hover:bg-stone-800 rounded-xl text-[10px] tracking-widest font-black uppercase">Home V2</a>
+                    </div>
+                </div>
+            </div>
+            <a href="sessions.html" class="hover:text-clay-500 transition-colors">Sessions</a>
+            <a href="portfolio.html" class="text-clay-500 border-b-2 border-clay-500 pb-1">Portfolio</a>
+            <a href="about.html" class="hover:text-clay-500 transition-colors">About</a>
+            <a href="contact.html" class="hover:text-clay-500 transition-colors">Contact</a>
+            <div class="relative group">
+                <a href="student-dashboard.html" class="flex items-center gap-1 hover:text-clay-500 transition-colors py-2">
+                    Dashboard <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-hover:rotate-180"></i>
+                </a>
+                <div class="absolute top-full -left-4 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                    <div class="bg-white dark:bg-stone-900 rounded-2xl shadow-2xl border border-stone-100 dark:border-stone-800 p-2 min-w-[180px]">
+                        <a href="student-dashboard.html" class="block px-4 py-3 hover:bg-stone-50 dark:hover:bg-stone-800 rounded-xl text-[10px] tracking-widest font-black uppercase">Student Portal</a>
+                        <a href="instructor-dashboard.html" class="block px-4 py-3 hover:bg-stone-50 dark:hover:bg-stone-800 rounded-xl text-[10px] tracking-widest font-black uppercase">Instructor View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-1 md:gap-3">
+            <a href="login.html" class="bg-clay-500/10 text-clay-500 hover:bg-clay-500 hover:text-white px-4 md:px-8 py-2.5 rounded-2xl font-black uppercase tracking-widest text-[10px] md:text-[11px] transition-all hidden sm:block">Login</a>
+            <button onclick="toggleRTL()" class="p-1.5 md:p-3 rounded-2xl bg-stone-50 dark:bg-stone-900/50 hover:bg-stone-100 transition-colors">
+                <i data-lucide="languages" class="w-4 h-4 md:w-5 md:h-5"></i>
+            </button>
+            <button id="theme-toggle" onclick="toggleTheme()" class="p-1.5 md:p-3 rounded-2xl bg-stone-50 dark:bg-stone-900/50 hover:bg-stone-100 transition-colors">
+                <i data-lucide="moon" class="dark:hidden w-4 h-4 md:w-5 md:h-5"></i>
+                <i data-lucide="sun" class="hidden dark:block w-4 h-4 md:w-5 md:h-5"></i>
+            </button>
+            <button id="menu-btn" class="xl:hidden p-1.5 md:p-3 text-stone-900 dark:text-white">
+                <i data-lucide="menu" class="w-5 h-5 md:w-6 md:h-6"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Drawer (Minimalist Elegant Refinement) -->
+    <div id="mobile-menu" class="fixed inset-0 bg-clay-50 dark:bg-stone-950 z-[2000] flex flex-col translate-x-full transition-transform duration-500 ease-in-out xl:hidden">
+        <!-- Drawer Header -->
+        <div class="flex justify-between items-center pt-12 px-10 mb-16">
+            <a href="index.html" class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center p-1 shadow-sm">
+                    <img src="assets/logo.png" alt="Logo" class="w-full h-full object-contain scale-125">
+                </div>
+                <span class="text-sm font-artistic text-clay-500 font-bold uppercase tracking-widest">KILNIFY</span>
+            </a>
+            <button id="close-menu" class="p-2 text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Navigation Area -->
+        <div class="flex-1 px-10">
+            <nav class="flex flex-col gap-10">
+                <!-- Home Link Group -->
+                <div class="space-y-4">
+                    <a href="index.html" class="text-xl font-artistic font-bold text-stone-900 dark:text-white hover:text-clay-500 transition-colors tracking-wide uppercase">HOME</a>
+                    <div class="flex gap-6 pl-0.5">
+                        <a href="index.html" class="text-[10px] font-bold tracking-[0.2em] text-stone-400 hover:text-clay-500 transition-colors uppercase">V1 Edition</a>
+                        <a href="home-v2.html" class="text-[10px] font-bold tracking-[0.2em] text-stone-400 hover:text-clay-500 transition-colors uppercase">V2 Edition</a>
+                    </div>
+                </div>
+
+                <a href="sessions.html" class="text-xl font-artistic font-bold text-stone-900 dark:text-white hover:text-clay-500 transition-colors tracking-wide">SESSIONS</a>
+                <a href="portfolio.html" class="text-xl font-artistic font-bold text-clay-500 tracking-wide uppercase">PORTFOLIO</a>
+                <a href="about.html" class="text-xl font-artistic font-bold text-stone-900 dark:text-white hover:text-clay-500 transition-colors tracking-wide">ABOUT</a>
+                <a href="contact.html" class="text-xl font-artistic font-bold text-stone-900 dark:text-white hover:text-clay-500 transition-colors tracking-wide">CONTACT</a>
+
+                <!-- Dashboard Link Group -->
+                <div class="space-y-4">
+                    <a href="student-dashboard.html" class="text-xl font-artistic font-bold text-stone-900 dark:text-white hover:text-clay-500 transition-colors tracking-wide uppercase">DASHBOARD</a>
+                    <div class="flex gap-6 pl-0.5">
+                        <a href="student-dashboard.html" class="text-[10px] font-bold tracking-[0.2em] text-stone-400 hover:text-clay-500 transition-colors uppercase">Student</a>
+                        <a href="instructor-dashboard.html" class="text-[10px] font-bold tracking-[0.2em] text-stone-400 hover:text-clay-500 transition-colors uppercase">Instructor</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Bottom CTA Area -->
+        <div class="p-10 pb-12">
+            <div class="flex flex-col gap-3">
+                <a href="login.html" class="bg-[#2D1E16] dark:bg-stone-900 text-white py-5 rounded-2xl font-black uppercase tracking-widest text-[11px] text-center border border-white/5 shadow-2xl shadow-black/20">Login Account</a>
+                <a href="sessions.html" class="bg-clay-500 text-white py-5 rounded-2xl font-black uppercase tracking-widest text-[11px] text-center shadow-xl shadow-clay-500/30">Book a Studio Tour</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative pt-32 pb-48 overflow-hidden bg-stone-950">
+        <!-- Premium Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="assets/porfolio/portfolio_hero-image.jpg" alt="Portfolio Hero" class="w-full h-full object-cover opacity-30 animate-fade-in">
+            <div class="absolute inset-0 bg-gradient-to-b from-stone-950/80 via-stone-950/40 to-stone-950"></div>
+        </div>
+
+        <div class="container max-w-7xl mx-auto px-4 md:px-8 relative z-10 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-clay-500/20 border border-clay-500/30 text-white text-[10px] font-black uppercase tracking-[0.2em] mb-12 backdrop-blur-md">
+                <i data-lucide="sparkles" class="w-3 h-3 text-clay-400"></i> Curated Studio Collection
+            </div>
+            
+            <h1 class="text-[28px] xs:text-4xl md:text-8xl font-artistic font-bold mb-8 leading-tight tracking-tight text-white w-full">Artistic <span class="text-gradient-clay">Integrity.</span> <br>Tactile Beauty.</h1>
+            <p class="text-stone-300 mb-12 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed">
+                Explore the intersection of raw earth and modern design. Every piece tells a story of patience, process, and the human touch.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-6 mb-20">
+                <button onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})" class="btn-clay px-10">Explore Work</button>
+                <div class="flex flex-col items-center sm:items-start gap-1">
+                    <div class="flex -space-x-3 mb-1">
+                        <img src="https://i.pravatar.cc/150?u=1" class="w-10 h-10 rounded-full border-2 border-white dark:border-stone-900 object-cover" alt="Student">
+                        <img src="https://i.pravatar.cc/150?u=2" class="w-10 h-10 rounded-full border-2 border-white dark:border-stone-900 object-cover" alt="Student">
+                        <img src="https://i.pravatar.cc/150?u=3" class="w-10 h-10 rounded-full border-2 border-white dark:border-stone-900 object-cover" alt="Student">
+                        <div class="w-10 h-10 rounded-full border-2 border-white dark:border-stone-900 bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-[10px] font-bold">+1.2k</div>
+                    </div>
+                    <p class="text-xs text-stone-400 font-bold uppercase tracking-widest flex items-center gap-2">
+                        <i data-lucide="star" class="w-3 h-3 text-yellow-500 fill-yellow-500"></i> 4.9 Studio Rating
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SECTION 1: SMART GALLERY -->
+    <section id="gallery" class="py-20 bg-stone-50 dark:bg-stone-900/20">
+        <div class="container max-w-7xl mx-auto px-4 md:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-artistic font-bold mb-4">Featured Works</h2>
+                    <p class="text-stone-400 max-w-md">Our collection spans functional dinnerware to experimental abstract sculptures.</p>
+                </div>
+                <!-- Filters -->
+                <div class="flex items-center gap-3 overflow-x-auto pb-4 md:pb-0 scrollbar-hide">
+                    <div class="filter-pill active">All Work</div>
+                    <div class="filter-pill">Vases</div>
+                    <div class="filter-pill">Tableware</div>
+                    <div class="filter-pill">Sculptural</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Card 1 -->
+                <div class="portfolio-card reveal group">
+                    <div class="portfolio-image-container">
+                        <img src="assets/porfolio/Oceanic Vase.jpg" alt="Oceanic Vase" class="w-full h-full object-cover">
+                        <div class="hover-overlay">
+                            <h4 class="text-white text-3xl font-artistic mb-2">Oceanic Vase</h4>
+                            <p class="text-stone-300 text-sm mb-8 leading-relaxed">Hand-thrown stoneware with a reactive turquoise glaze. High-fired at 1250°C for maximum durability.</p>
+                            <button class="w-full py-4 bg-white text-stone-900 font-black text-[10px] uppercase tracking-[0.3em] rounded-2xl hover:bg-clay-500 hover:text-white transition-all shadow-xl">View Details</button>
+                        </div>
+                    </div>
+                    <div class="p-8 flex justify-between items-center">
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-clay-500 mb-1 block">Sculptural</span>
+                            <h3 class="text-xl font-bold">Midnight Abyss</h3>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-5 h-5 text-stone-300 group-hover:text-clay-500 transition-colors"></i>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="portfolio-card reveal group" data-reveal-index="1">
+                    <div class="portfolio-image-container">
+                        <img src="assets/porfolio/Earth Bowl Set.jpg" alt="Terracotta Bowl" class="w-full h-full object-cover">
+                        <div class="hover-overlay">
+                            <h4 class="text-white text-3xl font-artistic mb-2">Earth Bowl Set</h4>
+                            <p class="text-stone-300 text-sm mb-8 leading-relaxed">Matte finish terracotta collection designed for Japanese-inspired minimalist dining experiences.</p>
+                            <button class="w-full py-4 bg-white text-stone-900 font-black text-[10px] uppercase tracking-[0.3em] rounded-2xl hover:bg-clay-500 hover:text-white transition-all shadow-xl">View Details</button>
+                        </div>
+                    </div>
+                    <div class="p-8 flex justify-between items-center">
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-clay-500 mb-1 block">Tableware</span>
+                            <h3 class="text-xl font-bold">Wabi-Sabi Bowls</h3>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-5 h-5 text-stone-300 group-hover:text-clay-500 transition-colors"></i>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="portfolio-card reveal group" data-reveal-index="2">
+                    <div class="portfolio-image-container">
+                        <img src="assets/porfolio/Brutalist Column.jpg" alt="Abstract Piece" class="w-full h-full object-cover">
+                        <div class="hover-overlay">
+                            <h4 class="text-white text-3xl font-artistic mb-2">Brutalist Column</h4>
+                            <p class="text-stone-300 text-sm mb-8 leading-relaxed">Experimental multi-textured piece exploring raw structural integrity and the geometry of fire.</p>
+                            <button class="w-full py-4 bg-white text-stone-900 font-black text-[10px] uppercase tracking-[0.3em] rounded-2xl hover:bg-clay-500 hover:text-white transition-all shadow-xl">View Details</button>
+                        </div>
+                    </div>
+                    <div class="p-8 flex justify-between items-center">
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-clay-500 mb-1 block">Experimental</span>
+                            <h3 class="text-xl font-bold">Raw Structure</h3>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-5 h-5 text-stone-300 group-hover:text-clay-500 transition-colors"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 text-center">
+                <button class="px-10 py-4 border-2 border-stone-200 dark:border-stone-800 rounded-2xl font-bold hover:border-clay-500 hover:text-clay-500 transition-all text-xs uppercase tracking-widest">Load More Artworks</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: HOW IT WORKS -->
+    <section class="py-32 overflow-hidden">
+        <div class="container max-w-7xl mx-auto px-4 md:px-8">
+            <div class="text-center mb-24">
+                <h2 class="text-4xl md:text-6xl font-artistic font-bold mb-6">How Your Piece <br>Comes to Life</h2>
+                <p class="text-stone-400 max-w-xl mx-auto">A structured approach to the ancient art of pottery, refined for the modern creator.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 relative">
+                <div class="hidden md:block absolute top-12 left-0 w-full h-[2px] bg-stone-100 dark:bg-stone-800 z-0"></div>
+                
+                <div class="relative z-10 text-center flex flex-col items-center">
+                    <div class="w-24 h-24 bg-white dark:bg-stone-900 rounded-3xl shadow-xl flex items-center justify-center mb-8 border border-stone-100 dark:border-stone-800 group hover:scale-110 transition-transform">
+                        <i data-lucide="search" class="w-10 h-10 text-clay-500 group-hover:rotate-12 transition-transform"></i>
+                    </div>
+                    <div class="bg-clay-500 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold mb-4 shadow-lg">01</div>
+                    <h4 class="text-xl font-bold mb-3">Choose a Session</h4>
+                    <p class="text-sm text-stone-400 leading-relaxed">Select from wheel throwing, hand-building, or advanced workshops.</p>
+                </div>
+
+                <div class="relative z-10 text-center flex flex-col items-center">
+                    <div class="w-24 h-24 bg-white dark:bg-stone-900 rounded-3xl shadow-xl flex items-center justify-center mb-8 border border-stone-100 dark:border-stone-800 group hover:scale-110 transition-transform">
+                        <i data-lucide="book-open" class="w-10 h-10 text-clay-500 group-hover:rotate-12 transition-transform"></i>
+                    </div>
+                    <div class="bg-clay-500 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold mb-4 shadow-lg">02</div>
+                    <h4 class="text-xl font-bold mb-3">Learn from Experts</h4>
+                    <p class="text-sm text-stone-400 leading-relaxed">Receive hands-on guidance from award-winning ceramicists.</p>
+                </div>
+
+                <div class="relative z-10 text-center flex flex-col items-center">
+                    <div class="w-24 h-24 bg-white dark:bg-stone-900 rounded-3xl shadow-xl flex items-center justify-center mb-8 border border-stone-100 dark:border-stone-800 group hover:scale-110 transition-transform">
+                        <i data-lucide="palmtree" class="w-10 h-10 text-clay-500 group-hover:rotate-12 transition-transform"></i>
+                    </div>
+                    <div class="bg-clay-500 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold mb-4 shadow-lg">03</div>
+                    <h4 class="text-xl font-bold mb-3">Create Your Piece</h4>
+                    <p class="text-sm text-stone-400 leading-relaxed">Shape raw clay into your unique vision using provided materials.</p>
+                </div>
+
+                <div class="relative z-10 text-center flex flex-col items-center">
+                    <div class="w-24 h-24 bg-white dark:bg-stone-900 rounded-3xl shadow-xl flex items-center justify-center mb-8 border border-stone-100 dark:border-stone-800 group hover:scale-110 transition-transform">
+                        <i data-lucide="package" class="w-10 h-10 text-clay-500 group-hover:rotate-12 transition-transform"></i>
+                    </div>
+                    <div class="bg-clay-500 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold mb-4 shadow-lg">04</div>
+                    <h4 class="text-xl font-bold mb-3">Take Home</h4>
+                    <p class="text-sm text-stone-400 leading-relaxed">After clear glazing and firing, your piece is ready for its new home.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: WHAT YOU GET -->
+    <section class="py-32 bg-stone-50 dark:bg-stone-900/40 relative">
+        <div class="container max-w-7xl mx-auto px-4 md:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-20">
+                <div class="lg:w-1/2">
+                    <h2 class="text-4xl md:text-5xl font-artistic font-bold mb-8 leading-tight">Beyond Just a Class. <br>A Full Creative <span class="text-clay-500">Suite.</span></h2>
+                    <ul class="space-y-8">
+                        <li class="flex items-start gap-5 group">
+                            <div class="w-12 h-12 rounded-2xl bg-white dark:bg-stone-800 shadow-lg flex items-center justify-center shrink-0 group-hover:bg-clay-500 group-hover:text-white transition-all">
+                                <i data-lucide="zap" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h5 class="text-lg font-bold mb-1">State-of-the-Art Wheels</h5>
+                                <p class="text-sm text-stone-400">Access premium Shimpo VL-Lite wheels for smooth, professional-grade throwing.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-5 group">
+                            <div class="w-12 h-12 rounded-2xl bg-white dark:bg-stone-800 shadow-lg flex items-center justify-center shrink-0 group-hover:bg-clay-500 group-hover:text-white transition-all">
+                                <i data-lucide="droplets" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h5 class="text-lg font-bold mb-1">Custom Studio Glazes</h5>
+                                <p class="text-sm text-stone-400">Choose from 24 unique, food-safe glazes mixed exclusively in-house.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-5 group">
+                            <div class="w-12 h-12 rounded-2xl bg-white dark:bg-stone-800 shadow-lg flex items-center justify-center shrink-0 group-hover:bg-clay-500 group-hover:text-white transition-all">
+                                <i data-lucide="shield-check" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h5 class="text-lg font-bold mb-1">Lifetime Community Access</h5>
+                                <p class="text-sm text-stone-400">Join our alumni network for exclusive pop-up sales and studio time.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="lg:w-1/2 relative">
+                    <div class="absolute inset-0 bg-clay-500/10 rounded-[3rem] blur-3xl -rotate-6"></div>
+                    <div class="relative bg-white dark:bg-stone-900 p-8 rounded-[3rem] border border-stone-200 dark:border-stone-800 shadow-2xl overflow-hidden animate-float">
+                        <img src="assets/porfolio/Precision Kiln System.jpg" alt="The Kiln" class="rounded-[2rem] w-full mb-8 shadow-lg">
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-stone-400">Tech Highlight</span>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-green-500 flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Optimal Temperature
+                            </span>
+                        </div>
+                        <h4 class="text-2xl font-bold mb-4">Precision Kiln System</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 bg-stone-50 dark:bg-stone-800/50 rounded-2xl text-center">
+                                <p class="text-2xl font-bold text-clay-500">2350°F</p>
+                                <p class="text-[10px] uppercase font-bold text-stone-400">Peak Temp</p>
+                            </div>
+                            <div class="p-4 bg-stone-50 dark:bg-stone-800/50 rounded-2xl text-center">
+                                <p class="text-2xl font-bold text-clay-500">Cone 6</p>
+                                <p class="text-[10px] uppercase font-bold text-stone-400">Firing Target</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: CREATOR RESULTS -->
+    <section class="py-32">
+        <div class="container max-w-7xl mx-auto px-4 md:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-24">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-artistic font-bold mb-4 leading-tight">Real Results <br>from Real Creators</h2>
+                    <p class="text-stone-400 max-w-sm">Witness the journey from raw clay to finished masterpiece through our student collections.</p>
+                </div>
+                <button class="text-clay-500 font-bold flex items-center gap-2 hover:opacity-80 transition-opacity uppercase text-[10px] tracking-widest">
+                    View Instagram Feed <i data-lucide="instagram" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <!-- Result 1 -->
+                <div class="reveal group">
+                    <div class="flex items-center gap-1 mb-8">
+                        <div class="flex-1 h-80 rounded-[2.5rem] overflow-hidden bg-stone-100 relative shadow-lg">
+                             <img src="assets/porfolio/Card 1 — RAW (Week 1).jpg" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Before">
+                             <span class="absolute top-6 left-6 px-3 py-1 bg-black/50 text-white text-[10px] font-bold rounded-full backdrop-blur-md">Week 1: Raw</span>
+                        </div>
+                        <div class="w-12 h-12 bg-white dark:bg-stone-800 border border-stone-100 dark:border-stone-800 rounded-full flex items-center justify-center z-10 shadow-xl -mx-6">
+                            <i data-lucide="arrow-right" class="w-6 h-6 text-clay-500"></i>
+                        </div>
+                        <div class="flex-1 h-80 rounded-[2.5rem] overflow-hidden bg-stone-100 relative shadow-lg">
+                             <img src="assets/porfolio/Card 2 — PROCESS (Firing).jpg" class="w-full h-full object-cover" alt="After">
+                             <span class="absolute top-6 left-6 px-3 py-1 bg-clay-500 text-white text-[10px] font-bold rounded-full shadow-lg">Week 6: Fired</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 p-2">
+                        <img src="https://i.pravatar.cc/150?u=sarah" class="w-12 h-12 rounded-2xl object-cover ring-4 ring-stone-50 dark:ring-stone-900" alt="Sarah">
+                        <div>
+                            <h5 class="text-lg font-bold">Sarah Jenkins</h5>
+                            <p class="text-stone-400 text-sm italic">"I came in with zero experience. After 6 sessions, I have a full dinnerware set I actually use every day. Life changing!"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result 2 -->
+                <div class="reveal group" data-reveal-index="1">
+                    <div class="flex items-center gap-1 mb-8">
+                        <div class="flex-1 h-80 rounded-[2.5rem] overflow-hidden bg-stone-100 relative shadow-lg">
+                             <img src="assets/porfolio/Card 3 — STUDIO MOMENT.jpg" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Before">
+                             <span class="absolute top-6 left-6 px-3 py-1 bg-black/50 text-white text-[10px] font-bold rounded-full backdrop-blur-md">Studio Session</span>
+                        </div>
+                        <div class="w-12 h-12 bg-white dark:bg-stone-800 border border-stone-100 dark:border-stone-800 rounded-full flex items-center justify-center z-10 shadow-xl -mx-6">
+                            <i data-lucide="arrow-right" class="w-6 h-6 text-clay-500"></i>
+                        </div>
+                        <div class="flex-1 h-80 rounded-[2.5rem] overflow-hidden bg-stone-100 relative shadow-lg">
+                             <img src="assets/porfolio/Card 4 — FINAL PRODUCT.jpg" class="w-full h-full object-cover" alt="After">
+                             <span class="absolute top-6 left-6 px-3 py-1 bg-clay-500 text-white text-[10px] font-bold rounded-full shadow-lg">Portfolio Piece</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 p-2">
+                        <img src="https://i.pravatar.cc/150?u=marco" class="w-12 h-12 rounded-2xl object-cover ring-4 ring-stone-50 dark:ring-stone-900" alt="Marco">
+                        <div>
+                            <h5 class="text-lg font-bold">Marco Rossi</h5>
+                            <p class="text-stone-400 text-sm italic">"The instructors here don't just teach you how to throw; they teach you how to see. My work has reached a whole new level."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: TRUST & SOCIAL PROOF -->
+    <section class="py-32 bg-stone-950 text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-[0.05] bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+        <div class="container max-w-7xl mx-auto px-6 md:px-8 relative z-10">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-16 border-b border-white/5 pb-24 mb-24">
+                <div class="text-center md:text-left">
+                    <h2 class="text-5xl md:text-7xl font-artistic font-bold mb-4 text-clay-500">5.2k</h2>
+                    <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.2em] text-stone-500">Creators Guided</p>
+                </div>
+                <div class="text-center md:text-left">
+                    <h2 class="text-5xl md:text-7xl font-artistic font-bold mb-4 text-clay-500">12k+</h2>
+                    <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.2em] text-stone-500">Kiln Fired Pieces</p>
+                </div>
+                <div class="text-center md:text-left">
+                    <h2 class="text-5xl md:text-7xl font-artistic font-bold mb-4 text-clay-500">4.9</h2>
+                    <div class="flex items-center justify-center md:justify-start gap-1 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-clay-500 text-clay-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-clay-500 text-clay-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-clay-500 text-clay-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-clay-500 text-clay-500"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-clay-500 text-clay-500"></i>
+                    </div>
+                    <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.2em] text-stone-500">Avg Session Rating</p>
+                </div>
+                <div class="text-center md:text-left">
+                    <h2 class="text-5xl md:text-7xl font-artistic font-bold mb-4 text-clay-500">140+</h2>
+                    <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.2em] text-stone-500">Studio Hours Weekly</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="p-8 rounded-[2.5rem] bg-white/5 border border-white/5 backdrop-blur-xl">
+                    <i data-lucide="quote" class="w-10 h-10 text-clay-500/20 mb-6"></i>
+                    <p class="text-stone-400 mb-8 leading-relaxed">"Kilnify is the highlight of my week. The atmosphere is meditative and the results are incredibly professional."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-clay-500 flex items-center justify-center font-bold text-xs">EL</div>
+                        <div>
+                            <h6 class="font-bold">Emily Lofton</h6>
+                            <p class="text-[10px] uppercase text-stone-500 font-bold tracking-widest">Seasoned Member</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-8 rounded-[2.5rem] bg-white/5 border border-white/5 backdrop-blur-xl">
+                    <i data-lucide="quote" class="w-10 h-10 text-clay-500/20 mb-6"></i>
+                    <p class="text-stone-400 mb-8 leading-relaxed">"The instructors are master artists. I values the technical precision alongside the creative freedom."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-clay-500 flex items-center justify-center font-bold text-xs">DT</div>
+                        <div>
+                            <h6 class="font-bold">David Tang</h6>
+                            <p class="text-[10px] uppercase text-stone-500 font-bold tracking-widest">Masterclass Student</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-8 rounded-[2.5rem] bg-white/5 border border-white/5 backdrop-blur-xl">
+                    <i data-lucide="quote" class="w-10 h-10 text-clay-500/20 mb-6"></i>
+                    <p class="text-stone-400 mb-8 leading-relaxed">"Finally, a studio that treats pottery like the premium experience it is. Stunning workspace and great community."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-clay-500 flex items-center justify-center font-bold text-xs">KP</div>
+                        <div>
+                            <h6 class="font-bold">Kelsey Park</h6>
+                            <p class="text-[10px] uppercase text-stone-500 font-bold tracking-widest">Founder, ClayCo</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section (Split Layout SaaS) -->
+    <section class="py-24 md:py-40 relative overflow-hidden bg-white dark:bg-stone-950">
+        <div class="container max-w-7xl mx-auto px-6 md:px-8 relative z-10">
+            <div class="bg-[#0F1115] rounded-[4rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] reveal opacity-0 border border-white/[0.05] group">
+                <div class="grid lg:grid-cols-2 items-center">
+                    <!-- Left: Artistic Showcase -->
+                    <div class="relative h-[400px] lg:h-[600px] overflow-hidden">
+                        <img src="assets/porfolio/Portfolio journey starts here.jpg" alt="Artistic Pottery" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                        <div class="absolute inset-0 bg-gradient-to-r from-[#0F1115]/80 via-transparent to-transparent lg:from-transparent"></div>
+                        <!-- Floating Glass Badge -->
+                        <div class="absolute top-8 left-8 p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl reveal" data-reveal-index="1">
+                            <div class="flex items-center gap-4 mb-2">
+                                <div class="w-2 h-2 rounded-full bg-clay-500 animate-pulse"></div>
+                                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Limited Experience</span>
+                            </div>
+                            <h5 class="text-xl font-artistic text-white leading-tight">Handcrafted <br>Mastery.</h5>
+                        </div>
+                    </div>
+
+                    <!-- Right: Content & Conversion -->
+                    <div class="p-12 md:p-20 relative">
+                        <!-- BG Glows -->
+                        <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] -mr-32 -mt-32"></div>
+                        <div class="absolute bottom-0 left-0 w-64 h-64 bg-clay-500/10 rounded-full blur-[80px] -ml-24 -mb-24"></div>
+
+                        <div class="relative z-10">
+                            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em] mb-8">
+                                <i data-lucide="award" class="w-3 h-3"></i> Top 1% Pottery Experience
+                            </div>
+                            <h2 class="text-3xl md:text-5xl font-artistic font-bold text-white mb-6 leading-tight tracking-tight">Your Portfolio <br>Journey <span class="text-gradient-clay">Starts Here.</span></h2>
+                            <p class="text-stone-400 mb-10 text-lg leading-relaxed font-medium">Join 5,000+ creators and shape your story in clay. Book your first session today and start building your collection.</p>
+                            
+                            <div class="flex flex-wrap items-center gap-6">
+                                <a href="sessions.html" class="px-10 py-5 bg-clay-500 text-white font-bold rounded-2xl hover:scale-105 transition-all shadow-[0_20px_40px_-10px_rgba(179,92,68,0.4)] flex items-center gap-3">
+                                    Book Session <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                                </a>
+                                <a href="contact.html" class="text-white font-bold hover:text-clay-400 transition-colors flex items-center gap-2">
+                                    Contact Studio <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+
+                            <!-- Trust Stats -->
+                            <div class="mt-16 pt-10 border-t border-white/5 grid grid-cols-2 gap-8">
+                                <div>
+                                    <p class="text-2xl font-bold text-white mb-1">5,000+</p>
+                                    <p class="text-[10px] uppercase font-black tracking-widest text-stone-500">Global Creators</p>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-white mb-1">4.9/5</p>
+                                    <p class="text-[10px] uppercase font-black tracking-widest text-stone-500">Student Rating</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Master Footer from SS -->
+    <footer class="bg-black text-stone-400 pt-32 pb-16">
+        <div class="container max-w-7xl mx-auto px-4 md:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-16 mb-24">
+                
+                <!-- Quick Links & Services (Top on Tablet) -->
+                <div class="md:col-span-2 lg:col-span-4 md:order-1 lg:order-2">
+                    <div class="grid grid-cols-2 gap-4 lg:gap-8">
+                        <div class="reveal" data-reveal-index="1">
+                            <h5 class="text-white font-bold text-sm mb-8 lg:mb-10 uppercase tracking-widest">Quick Links</h5>
+                            <ul class="space-y-4 lg:space-y-6 text-[13px] font-medium">
+                                <li><a href="index.html" class="hover:text-white transition-colors">Home V1</a></li>
+                                <li><a href="home-v2.html" class="hover:text-white transition-colors">Home V2</a></li>
+                                <li><a href="sessions.html" class="hover:text-white transition-colors">Sessions</a></li>
+                                <li><a href="portfolio.html" class="hover:text-white transition-colors">Portfolio</a></li>
+                                <li><a href="404.html" class="hover:text-white transition-colors">404 Error</a></li>
+                            </ul>
+                        </div>
+                        <div class="reveal" data-reveal-index="2">
+                            <h5 class="text-white font-bold text-sm mb-8 lg:mb-10 uppercase tracking-widest">Our Services</h5>
+                            <ul class="space-y-4 lg:space-y-6 text-[13px] font-medium">
+                                <li><a href="about.html" class="hover:text-white transition-colors">Our Story</a></li>
+                                <li><a href="contact.html" class="hover:text-white transition-colors">Contact</a></li>
+                                <li><a href="student-dashboard.html" class="hover:text-white transition-colors">Student Portal</a></li>
+                                <li><a href="instructor-dashboard.html" class="hover:text-white transition-colors">Instructor View</a></li>
+                                <li><a href="coming-soon.html" class="hover:text-white transition-colors">Coming Soon</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Branding (Bottom-Left on Tablet, Left on Desktop) -->
+                <div class="md:col-span-1 lg:col-span-4 reveal md:order-2 lg:order-1">
+                    <a href="index.html" class="flex items-center gap-4 mb-8 group">
+                        <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-lg shadow-black/5 overflow-hidden p-1.5 transition-transform group-hover:scale-110">
+                            <img src="assets/logo.png" alt="Kilnify Logo" class="w-full h-full object-contain scale-125">
+                        </div>
+                        <span class="text-2xl font-artistic text-white tracking-widest uppercase font-bold transition-all group-hover:text-clay-500">KILNIFY</span>
+                    </a>
+                    <p class="text-[13px] leading-relaxed mb-12 max-w-xs text-stone-500 font-medium">
+                        Crafting beauty from chaos. Premier pottery studio delivering mindful, artistic experiences in Clay City.
+                    </p>
+                    <div class="flex gap-4 md:gap-6 mt-12">
+                        <a href="#" class="w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-stone-900 flex items-center justify-center text-stone-500 hover:text-white transition-all border border-stone-800">
+                            <i data-lucide="linkedin" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        </a>
+                        <a href="#" class="w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-stone-900 flex items-center justify-center text-stone-500 hover:text-white transition-all border border-stone-800">
+                            <i data-lucide="instagram" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        </a>
+                        <a href="#" class="w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-stone-900 flex items-center justify-center text-stone-500 hover:text-white transition-all border border-stone-800">
+                            <i data-lucide="twitter" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Newsletter (Bottom-Right on Tablet, Right on Desktop) -->
+                <div class="md:col-span-1 lg:col-span-4 reveal md:order-3 lg:order-3" data-reveal-index="3">
+                    <h5 class="text-white font-bold text-sm mb-8 lg:mb-10 uppercase tracking-widest">Studio Updates</h5>
+                    <p class="text-[13px] text-stone-500 mb-8 lg:mb-10 font-medium">Join 5,000+ makers receiving weekly insights.</p>
+                    <div class="space-y-4">
+                        <input type="email" placeholder="Email address" class="w-full bg-[#111] border-none rounded-2xl py-5 px-8 text-sm text-white focus:ring-1 focus:ring-clay-500 outline-none transition-all shadow-inner">
+                        <button class="w-full bg-clay-500 text-white font-black text-sm uppercase tracking-[0.2em] py-5 rounded-2xl hover:bg-clay-600 transition-all shadow-lg shadow-clay-500/10 active:scale-95">
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-12 border-t border-stone-900 flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-[11px] font-bold uppercase tracking-widest text-stone-600">© 2026 KILNIFY STUDIO.</p>
+                <div class="flex flex-wrap justify-center gap-4 sm:gap-12 text-[11px] font-bold uppercase tracking-widest text-stone-600">
+                    <a href="#" class="hover:text-white transition-colors">PRIVACY</a>
+                    <a href="#" class="hover:text-white transition-colors">TERMS</a>
+                    <a href="#" class="hover:text-white transition-colors">COOKIES</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        lucide.createIcons();
+        
+        // Theme Toggle
+        const themeBtn = document.getElementById('theme-toggle');
+        if(themeBtn) {
+            themeBtn.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+            });
+        }
+
+        // Mobile Menu Logic
+        const menuBtn = document.getElementById('menu-btn');
+        const closeBtn = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if(menuBtn && mobileMenu) menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden';
+        });
+        if(closeBtn && mobileMenu) closeBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+            document.body.style.overflow = '';
+        });
+
+        // Theme Toggle Logic
+        const themeBtnHeader = document.getElementById('theme-toggle-header');
+        if(themeBtnHeader) {
+            themeBtnHeader.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+            });
+        }
+
+        // Interactive Reveal Observer
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active', 'opacity-100');
+                    entry.target.classList.remove('opacity-0');
+                    if (!entry.target.classList.contains('animate-reveal')) {
+                        entry.target.classList.add('animate-reveal');
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    </script>
+</body>
+</html>
