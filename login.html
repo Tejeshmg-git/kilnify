@@ -17,9 +17,9 @@
                             600: '#9E4A35'
                         } 
                     },
-                    fontFamily: { 
-                        sans: ['Outfit', 'sans-serif'], 
-                        artistic: ['Syne', 'sans-serif'] 
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        artistic: ['Poppins', 'sans-serif'],
                     },
                     screens: {
                         'xs': '380px',
@@ -34,6 +34,7 @@
         }
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         // Apply saved settings instantly to prevent flicker
         if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
@@ -58,9 +59,10 @@
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; }
     </style>
 </head>
-<body class="bg-stone-100 dark:bg-stone-950 text-stone-900 dark:text-white min-h-screen flex items-center justify-center relative py-20 px-4 md:px-8 transition-colors duration-500 overflow-x-hidden">
+<body class="font-sans bg-stone-100 dark:bg-stone-950 text-stone-900 dark:text-white min-h-screen flex items-center justify-center relative py-20 px-4 md:px-8 transition-colors duration-500 overflow-x-hidden">
 
     <!-- Premium Background Overlay -->
     <div class="fixed inset-0 z-0 pointer-events-none">
@@ -116,7 +118,6 @@
                 <div class="space-y-2">
                     <div class="flex justify-between items-center px-1">
                         <label class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-stone-500 dark:text-stone-400">Password</label>
-                        <a href="#" class="text-[10px] md:text-xs font-bold text-[#B35C44] hover:underline transition-all">Forgot?</a>
                     </div>
                     <div class="relative">
                         <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400 dark:text-stone-500"></i>
@@ -127,9 +128,12 @@
                     </div>
                 </div>
 
-                <div class="flex items-center gap-3 px-1 py-1">
-                    <input type="checkbox" id="remember" class="w-4 h-4 rounded-lg border-stone-300 text-[#B35C44] focus:ring-[#B35C44]">
-                    <label for="remember" class="text-[11px] md:text-xs font-bold text-stone-400 uppercase tracking-widest select-none cursor-pointer">Remember this device</label>
+                <div class="flex items-center justify-between px-1 py-1">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" id="remember" class="w-4 h-4 rounded-lg border-stone-300 text-[#B35C44] focus:ring-[#B35C44]">
+                        <label for="remember" class="text-[11px] md:text-xs font-bold text-stone-400 uppercase tracking-widest select-none cursor-pointer">Remember this device</label>
+                    </div>
+                    <a href="#" class="text-[10px] md:text-xs font-bold text-[#B35C44] hover:underline transition-all">Forgot Password?</a>
                 </div>
 
                 <button class="w-full bg-[#B35C44] text-white py-4 md:py-5 rounded-2xl font-black text-xs md:text-sm uppercase tracking-[0.2em] shadow-lg shadow-[#B35C44]/20 hover:bg-[#9E4A35] transition-all flex items-center justify-center gap-3 active:scale-95">

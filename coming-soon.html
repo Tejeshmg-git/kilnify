@@ -18,8 +18,8 @@
                         }
                     },
                     fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
-                        artistic: ['Syne', 'sans-serif']
+                        sans: ['Inter', 'sans-serif'],
+                        artistic: ['Poppins', 'sans-serif']
                     },
                     screens: {
                         'xs': '380px',
@@ -34,20 +34,24 @@
         }
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         // Apply saved settings instantly to prevent flicker
         if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
         if (localStorage.getItem('dir') === 'rtl') document.documentElement.dir = 'rtl';
     </script>
+    <style>
+        h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; }
+    </style>
 </head>
-<body class="bg-stone-950 text-white flex items-center justify-center min-h-screen relative overflow-x-hidden p-4">
+<body class="font-sans bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-white flex items-center justify-center min-h-screen relative overflow-x-hidden p-4 transition-colors duration-300">
 
     <div class="absolute top-6 left-6 xs:top-8 xs:left-8 md:top-12 md:left-12 z-20">
         <a href="index.html" class="flex items-center gap-2 md:gap-3 group shrink-0">
             <div class="w-10 h-10 md:w-14 md:h-14 bg-white rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg shadow-black/5 overflow-hidden p-1 md:p-1.5 transition-transform group-hover:scale-110">
                 <img src="assets/logo.png" alt="Kilnify Logo" class="w-full h-full object-contain scale-125">
             </div>
-            <span class="text-sm md:text-2xl font-artistic tracking-widest text-white font-bold uppercase transition-all">KILNIFY</span>
+            <span class="text-sm md:text-2xl font-artistic tracking-widest text-clay-500 font-bold uppercase transition-all">KILNIFY</span>
         </a>
     </div>
 
@@ -65,28 +69,28 @@
     <!-- Background Image -->
     <div class="absolute inset-0 opacity-40 z-0">
         <img src="assets/hero-v1.png" alt="Clay" class="w-full h-full object-cover grayscale opacity-50">
-        <div class="absolute inset-0 bg-stone-950/90 bg-gradient-to-b from-stone-950/60 via-stone-950 to-stone-950"></div>
+        <div class="absolute inset-0 bg-stone-50/90 dark:bg-stone-950/90 bg-gradient-to-b from-stone-50/60 dark:from-stone-950/60 via-stone-50 dark:via-stone-950 to-stone-50 dark:to-stone-950"></div>
     </div>
 
     <!-- Main Content -->
     <div class="relative z-10 text-center px-4 xs:px-6 w-full max-w-2xl py-20">
         <span class="text-clay-500 font-black tracking-[0.4em] md:tracking-[0.6em] uppercase text-[10px] md:text-xs mb-8 block reveal opacity-100">Studio Expansion 2026</span>
-        <h1 class="text-4xl xs:text-5xl md:text-8xl font-artistic font-bold mb-10 md:mb-12 leading-[1.1] tracking-tight">The Kiln is <br>Heating Up.</h1>
+        <h1 class="text-4xl xs:text-5xl md:text-8xl font-artistic font-bold mb-10 md:mb-12 leading-[1.1] tracking-tight text-stone-900 dark:text-white">The Kiln is <br>Heating Up</h1>
         
         <!-- Countdown -->
         <div class="flex items-center justify-center gap-6 xs:gap-8 md:gap-16 mb-16 md:mb-20">
             <div class="text-center group">
-                <p class="text-4xl md:text-7xl font-artistic font-bold mb-2 text-white">12</p>
+                <p class="text-4xl md:text-7xl font-artistic font-bold mb-2 text-stone-900 dark:text-white">12</p>
                 <p class="text-[9px] md:text-xs uppercase tracking-widest text-clay-500 font-bold">Days</p>
             </div>
-            <div class="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-stone-800"></div>
+            <div class="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-stone-200 dark:bg-stone-800"></div>
             <div class="text-center group">
-                <p class="text-4xl md:text-7xl font-artistic font-bold mb-2 text-white">08</p>
+                <p class="text-4xl md:text-7xl font-artistic font-bold mb-2 text-stone-900 dark:text-white">08</p>
                 <p class="text-[9px] md:text-xs uppercase tracking-widest text-clay-500 font-bold">Hours</p>
             </div>
-            <div class="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-stone-800"></div>
+            <div class="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-stone-200 dark:bg-stone-800"></div>
             <div class="text-center group">
-                <p class="text-4xl md:text-7xl font-artistic font-bold mb-2 text-white">45</p>
+                <p class="text-4xl md:text-7xl font-artistic font-bold mb-2 text-stone-900 dark:text-white">45</p>
                 <p class="text-[9px] md:text-xs uppercase tracking-widest text-clay-500 font-bold">Mins</p>
             </div>
         </div>
@@ -94,22 +98,22 @@
         <!-- Subscription Area -->
         <div class="max-w-md mx-auto">
             <p class="text-stone-400 dark:text-stone-300 mb-10 md:mb-12 text-sm md:text-base italic leading-relaxed">
-                Be the first to know when we open our new 5,000 sq ft ceramic haven in Clay City.
+                Be the first to know when we open our new 5,000 sq ft ceramic haven in Clay City
             </p>
             <form class="flex flex-col xs:flex-row gap-3 xs:gap-2">
-                <input type="email" placeholder="Your email address" class="flex-grow bg-white/10 border border-white/10 rounded-2xl py-4 md:py-5 px-8 outline-none focus:ring-1 focus:ring-clay-500 transition-all text-sm backdrop-blur-md">
+                <input type="email" placeholder="Your email address" class="flex-grow bg-white dark:bg-white/10 border border-stone-200 dark:border-white/10 rounded-2xl py-4 md:py-5 px-8 outline-none focus:ring-1 focus:ring-clay-500 transition-all text-sm backdrop-blur-md text-stone-900 dark:text-white">
                 <button class="bg-clay-500 text-white px-8 py-4 md:py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-clay-600 transition-all shadow-xl shadow-clay-500/20 active:scale-95 whitespace-nowrap">Notify Me</button>
             </form>
         </div>
         
         <!-- Social Proof -->
-        <div class="mt-20 md:mt-24 pt-12 border-t border-white/5 flex flex-col items-center gap-6">
+        <div class="mt-20 md:mt-24 pt-12 border-t border-stone-200 dark:border-white/5 flex flex-col items-center gap-6">
              <div class="flex -space-x-3">
-                <img src="https://i.pravatar.cc/150?u=1" class="w-10 h-10 rounded-full border-2 border-stone-900 object-cover" alt="Student">
-                <img src="https://i.pravatar.cc/150?u=2" class="w-10 h-10 rounded-full border-2 border-stone-900 object-cover" alt="Student">
-                <img src="https://i.pravatar.cc/150?u=3" class="w-10 h-10 rounded-full border-2 border-stone-900 object-cover" alt="Student">
+                <img src="https://i.pravatar.cc/150?u=1" class="w-10 h-10 rounded-full border-2 border-stone-100 dark:border-stone-900 object-cover" alt="Student">
+                <img src="https://i.pravatar.cc/150?u=2" class="w-10 h-10 rounded-full border-2 border-stone-100 dark:border-stone-900 object-cover" alt="Student">
+                <img src="https://i.pravatar.cc/150?u=3" class="w-10 h-10 rounded-full border-2 border-stone-100 dark:border-stone-900 object-cover" alt="Student">
             </div>
-            <p class="text-[10px] font-bold uppercase tracking-widest text-stone-500">Joined by <span class="text-white">5,000+</span> creators waiting for the launch.</p>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-stone-500">Joined by <span class="text-stone-900 dark:text-white">5,000+</span> creators waiting for the launch</p>
         </div>
     </div>
 

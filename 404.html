@@ -18,8 +18,8 @@
                         }
                     },
                     fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
-                        artistic: ['Syne', 'sans-serif']
+                        sans: ['Inter', 'sans-serif'],
+                        artistic: ['Poppins', 'sans-serif']
                     },
                     screens: {
                         'xs': '380px',
@@ -34,13 +34,17 @@
         }
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         // Apply saved settings instantly to prevent flicker
         if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
         if (localStorage.getItem('dir') === 'rtl') document.documentElement.dir = 'rtl';
     </script>
+    <style>
+        h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; }
+    </style>
 </head>
-<body class="bg-stone-50 dark:bg-stone-950 flex items-center justify-center min-h-screen relative overflow-x-hidden transition-colors duration-300">
+<body class="font-sans bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-white flex items-center justify-center min-h-screen relative overflow-x-hidden transition-colors duration-300">
 
     <div class="absolute top-6 left-6 xs:top-8 xs:left-8 md:top-12 md:left-12 z-20">
         <a href="index.html" class="flex items-center gap-2 md:gap-3 group">
@@ -63,22 +67,22 @@
     </div>
 
     <!-- 404 Content -->
-    <div class="text-center px-4 xs:px-6 w-full max-w-2xl overflow-hidden">
+    <div class="text-center px-4 xs:px-6 w-full max-w-4xl overflow-hidden">
         <div class="relative inline-block mb-8 md:mb-12">
-            <h1 class="text-6xl xs:text-[10rem] md:text-[12rem] font-artistic font-black leading-none opacity-10 transform scale-y-[1.4] origin-center select-none">404</h1>
+            <h1 class="text-6xl xs:text-[10rem] md:text-[14rem] font-artistic font-black leading-none opacity-10 select-none text-stone-900 dark:text-white tracking-[0.2em]">404</h1>
             <div class="absolute inset-0 flex items-center justify-center">
                  <i data-lucide="ghost" class="w-16 h-16 xs:w-20 xs:h-20 md:w-32 md:h-32 text-clay-500 animate-bounce"></i>
             </div>
         </div>
         
-        <h2 class="text-2xl xs:text-3xl md:text-5xl font-artistic font-bold mb-6 leading-tight">Looks Like a Crack in the Potter's Wheel</h2>
+        <h2 class="text-2xl xs:text-3xl md:text-5xl font-artistic font-bold mb-6 leading-tight text-stone-900 dark:text-white">Looks Like a Crack in the Potter's Wheel</h2>
         <p class="text-stone-500 dark:text-stone-400 mb-10 md:mb-12 max-w-md mx-auto text-sm md:text-base leading-relaxed">
-            The page you're looking for was either dropped, broken, or never fired properly. Let's get you back to the studio.
+            The page you're looking for was either dropped, broken, or never fired properly. Let's get you back to the studio
         </p>
         
         <div class="flex flex-col xs:flex-row justify-center gap-4">
             <a href="index.html" class="bg-clay-500 text-white px-8 py-4 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-clay-600 transition-all shadow-xl shadow-clay-500/20 active:scale-95 text-center">Back to Home</a>
-            <a href="sessions.html" class="px-8 py-4 rounded-2xl font-bold border-2 border-stone-200 dark:border-stone-800 hover:border-clay-500 hover:text-clay-500 transition-all uppercase tracking-widest text-xs text-center">Explore Sessions</a>
+            <a href="sessions.html" class="px-8 py-4 rounded-2xl font-bold border-2 border-stone-200 dark:border-stone-800 hover:border-clay-500 hover:text-clay-500 transition-all uppercase tracking-widest text-xs text-center text-stone-700 dark:text-stone-300">Explore Sessions</a>
         </div>
     </div>
 
